@@ -1,0 +1,194 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	pratica6.asm
+	Object File:	pratica6.hex
+	List File:	pratica6.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				; Pratica 6 - Sensor de presenca
+    2:				; Programador: Francisco Edno
+    3:				;
+    4:				; Projeto de lampada inteligente. Quando o sensor de presenca reconhece
+    5:				; uma pessoa, uma lampada e acessa por 3 segundos.
+    6:				;
+    7:				; Relay: p2.0
+    8:				; Sensor: p2.1
+    9:
+   10:				; *****************************************************************************
+   11:				; EQUATES
+   12:				; *****************************************************************************
+   13:		B      00A0	RELAY   equ     p2.0
+   14:		B      00A1	SENSOR  equ     p2.1
+   15:
+   16:				; *****************************************************************************
+   17:				; Main
+   18:				; *****************************************************************************
+   19:	  0000	30 A1 04	Main:   jnb     SENSOR, On  ; sensor = 1 ?
+   20:	  0003	D2 A0		        setb    RELAY       ; nao: desliga o rela
+   21:	  0005	01 00		        ajmp    Main        ; Volta para o inicio
+   22:
+   23:	  0007	C2 A0		On:     clr     RELAY       ; liga o rele
+   24:	  0009	30 A1 FD	        jnb      SENSOR, $  ; aguarda o sensor mudar o estado
+   25:	  000C	11 1B		        acall   Time        ; tempo de 3 segundos
+   26:	  000E	D2 A0		        setb    RELAY       ; desliga o rele
+   27:
+   28:	  0010	01 00		        ajmp    Main
+   29:
+   30:				; *****************************************************************************
+   31:				; SUB-ROTINAS
+   32:				; *****************************************************************************
+   33:
+   34:				; -----------------------------------------------------------------------------
+   35:				; Delay
+   36:				; -----------------------------------------------------------------------------
+   37:				; Delay de 0.1s
+   38:				; Registradores: r4, r5
+   39:				; -----------------------------------------------------------------------------
+   40:	  0012	7C C8		Delay:  mov     r4, #200
+   41:	  0014	7D FA		Back:   mov     r5, #250
+   42:	  0016	DD FE		        djnz    r5, $
+   43:	  0018	DC FA		        djnz    r4, Back
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:	  001A	22		        ret
+   45:
+   46:				; -----------------------------------------------------------------------------
+   47:				; Time
+   48:				; -----------------------------------------------------------------------------
+   49:				; Tempo de 1s
+   50:				; Registradores: r3
+   51:				; -----------------------------------------------------------------------------
+   52:	  001B	7B 1E		Time:   mov     r3, #30
+   53:	  001D	11 12		Back2:  acall   Delay
+   54:	  001F	DB FC		        djnz    r3, Back2
+   55:	  0021	22		        ret
+   56:
+   57:				        end
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+B				  DATA	      F0
+BACK				  CODE	    0014	  41
+BACK2				  CODE	    001D	  53
+CY				  BIT	      D7
+DELAY				  CODE	    0012	  40
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+MAIN				  CODE	    0000	  19
+ON				  CODE	    0007	  23
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+RD				  BIT	      B7
+RELAY				  NUMBER    00A0	  13
+REN				  BIT	      9C
+RESET				  CODE	    0000
+RI				  BIT	      98
+RS0				  BIT	      D3
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SENSOR				  NUMBER    00A1	  14
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIME				  CODE	    001B	  52
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TXD				  BIT	      B1
+WR				  BIT	      B6
